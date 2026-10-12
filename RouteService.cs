@@ -3,10 +3,8 @@ using TouristRoutes.Models;
 
 namespace TouristRoutes.Services
 {
-    public class RouteService
+    public class RouteService : IRouteService
     {
-        public static RouteService Instance = new RouteService();
-
         private readonly HttpClient _httpClient = new HttpClient();
         public async Task<TouristRoute> GetRouteByIdAsync(int id, CancellationToken ct = default)
         {

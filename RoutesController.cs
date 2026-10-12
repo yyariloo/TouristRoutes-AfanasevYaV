@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading;
-using System.Threading.Tasks;
 using TouristRoutes.Models;
 using TouristRoutes.Services;
 
@@ -10,7 +8,12 @@ namespace TouristRoutes.Controllers
     [Route("api/[controller]")]
     public class RoutesController : ControllerBase
     {
-        private readonly RouteService _service = RouteService.Instance;
+        private readonly IRouteService _service;
+
+        public RoutesController(IRouteService service)
+        {
+            _service = service;
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRoute(int id)
@@ -22,10 +25,8 @@ namespace TouristRoutes.Controllers
         [HttpPost("upload-gpx")]
         public async Task<IActionResult> UploadGpx(int id, [FromBody] string gpxData)
         {
-            _service.SaveRouteGpxFileAsync(id, gpxData);
-
+            await _service.SaveRouteGpxFileAsync(id, gpxData);
             _service.NotifySubscribers(new TouristRoute { Id = id });
-
             return Ok();
         }
 
@@ -38,16 +39,13 @@ namespace TouristRoutes.Controllers
                 MaxLat = 60.0,
                 RegionName = "Caucasus",
                 Season = "Summer"
-                // ... много полей
             };
-
             var routes = FilterRoutes(filter);
             return Ok(routes);
         }
 
         private TouristRoute[] FilterRoutes(RouteFilterCriteria criteria)
         {
-            // Имитация фильтрации
             Thread.Sleep(500);
             return new TouristRoute[0];
         }

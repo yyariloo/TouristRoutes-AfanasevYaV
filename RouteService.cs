@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Xml.Linq;
 using TouristRoutes.Models;
 
 namespace TouristRoutes.Services
@@ -25,26 +25,21 @@ namespace TouristRoutes.Services
             await using var writer = new StreamWriter(fs);
             await writer.WriteAsync(gpxContent.AsMemory(), ct);
         }
-
+        
         public List<Coordinates> ParseGpxTrack(string gpxXml)
         {
-            var waypoints = new ArrayList();
+            if (string.IsNullOrWhiteSpace(gpxXml))
+                return new List<Coordinates>();
 
-            string[] lines = gpxXml.Split('\n');
-            foreach (string line in lines)
-            {
-                if (line.Contains("<trkpt"))
-                {
-                    string latStr = line.Substring(line.IndexOf("lat=") + 5, 10);
-                    string lonStr = line.Substring(line.IndexOf("lon=") + 5, 10);
-
-                    var coord = new Coordinates(double.Parse(latStr), double.Parse(lonStr), 0);
-
-                    waypoints.Add(coord);
-                }
-            }
-
-            return waypoints.Cast<Coordinates>().ToList();
+            var doc = XDocument.Parse(gpxXml);
+            
+            return doc.Descendants()
+                .Where(e => e.Name.LocalName == "trkpt")
+                .Select(trkpt => new Coordinates(
+                    (double)trkpt.Attribute("lat"),
+                    (double)trkpt.Attribute("lon"),
+                    0))
+                .ToList();
         }
         
         public async Task DownloadAndCacheExternalMapAsync(int routeId, CancellationToken ct = default)

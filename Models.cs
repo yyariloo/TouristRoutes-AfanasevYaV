@@ -5,9 +5,9 @@ namespace TouristRoutes.Models
 {
     public struct Coordinates
     {
-        public double Latitude;
-        public double Longitude;
-        public double Altitude;
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double Altitude { get; set; }
 
         public Coordinates(double lat, double lng, double alt)
         {

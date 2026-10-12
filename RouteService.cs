@@ -37,11 +37,16 @@ namespace TouristRoutes.Services
             }
         }
 
-        public void SaveRouteGpxFile(int routeId, string gpxContent)
+        public async Task SaveRouteGpxFileAsync(int routeId, string gpxContent, CancellationToken ct = default)
         {
-            FileStream fs = new FileStream($"C:\\routes\\{routeId}.gpx", FileMode.Create);
-            StreamWriter writer = new StreamWriter(fs);
-            writer.Write(gpxContent);
+            const string routesDirectory = "C:\\routes";
+            Directory.CreateDirectory(routesDirectory);
+    
+            var path = Path.Combine(routesDirectory, $"{routeId}.gpx");
+    
+            await using var fs = new FileStream(path, FileMode.Create);
+            await using var writer = new StreamWriter(fs);
+            await writer.WriteAsync(gpxContent.AsMemory(), ct);
         }
 
         public List<Coordinates> ParseGpxTrack(string gpxXml)

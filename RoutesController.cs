@@ -22,7 +22,7 @@ namespace TouristRoutes.Controllers
         [HttpPost("upload-gpx")]
         public async Task<IActionResult> UploadGpx(int id, [FromBody] string gpxData)
         {
-            _service.SaveRouteGpxFile(id, gpxData);
+            _service.SaveRouteGpxFileAsync(id, gpxData);
 
             _service.NotifySubscribers(new TouristRoute { Id = id });
 

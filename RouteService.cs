@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Microsoft.Data.SqlClient;
-using System.IO;
-using System.Net.Http;
-using System.Net.Mail;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Collections;
 using TouristRoutes.Models;
 
 namespace TouristRoutes.Services
@@ -15,35 +7,20 @@ namespace TouristRoutes.Services
     {
         public static RouteService Instance = new RouteService();
 
-        private readonly object _syncLock = new object();
-        private string _connectionString = "Server=...;Database=...;";
-
-        private HttpClient _httpClient = new HttpClient();
-
-        public async Task<TouristRoute> GetRouteByIdAsync(int id)
+        private readonly HttpClient _httpClient = new HttpClient();
+        public async Task<TouristRoute> GetRouteByIdAsync(int id, CancellationToken ct = default)
         {
-            lock (_syncLock)
-            {
-                var task = Task.Run(() =>
-                {
-                    using (var conn = new SqlConnection(_connectionString))
-                    {
-                        conn.Open();
-                        // ... чтение из БД ...
-                        return new TouristRoute { Id = id, Name = "Test" };
-                    }
-                });
-                return task.Result;
-            }
+            await Task.Delay(50, ct);
+            return new TouristRoute { Id = id, Name = "Test" };
         }
 
         public async Task SaveRouteGpxFileAsync(int routeId, string gpxContent, CancellationToken ct = default)
         {
             const string routesDirectory = "C:\\routes";
             Directory.CreateDirectory(routesDirectory);
-    
+
             var path = Path.Combine(routesDirectory, $"{routeId}.gpx");
-    
+
             await using var fs = new FileStream(path, FileMode.Create);
             await using var writer = new StreamWriter(fs);
             await writer.WriteAsync(gpxContent.AsMemory(), ct);

@@ -1,9 +1,11 @@
 using System.Text.Json.Serialization;
+using TouristRoutes;
 using TouristRoutes.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IRouteService, RouteService>();
+builder.Services.AddSingleton<IRoutePricingService, RoutePricingService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

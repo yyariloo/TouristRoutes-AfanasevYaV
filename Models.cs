@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace TouristRoutes.Models
+﻿namespace TouristRoutes.Models
 {
     public enum RouteType
     {
@@ -30,6 +28,6 @@ namespace TouristRoutes.Models
         public string Description { get; set; }
         public string GpxTrackData { get; set; }
         public RouteType? RouteType { get; set; }
-        public ArrayList Waypoints { get; set; }
+        public List<Coordinates> Waypoints { get; set; } = new();
     }
 }

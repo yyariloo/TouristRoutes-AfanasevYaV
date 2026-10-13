@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IRouteService, RouteService>();
 builder.Services.AddSingleton<IRoutePricingService, RoutePricingService>();
+builder.Services.AddSingleton<IGpxParser, GpxParser>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

@@ -3,6 +3,14 @@ using System.Collections;
 
 namespace TouristRoutes.Models
 {
+    public enum RouteType
+    {
+        Hiking,
+        Ski,
+        Water,
+        Other
+    }
+    
     public struct Coordinates
     {
         public double Latitude { get; set; }
@@ -33,7 +41,7 @@ namespace TouristRoutes.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public string GpxTrackData { get; set; } // Огромная строка с XML/GPX
-        public string RouteType { get; set; } // "Hiking", "Ski", "Water"
+        public RouteType? RouteType { get; set; }
         public ArrayList Waypoints { get; set; }
     }
 }

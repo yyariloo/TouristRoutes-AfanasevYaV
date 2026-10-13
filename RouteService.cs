@@ -62,13 +62,13 @@ namespace TouristRoutes.Services
             await stream.CopyToAsync(fs, ct);
         }
 
-        public decimal CalculatePrice(TouristRoute route, int days)
+        public decimal CalculatePrice(TouristRoute route, int days) => route.RouteType switch
         {
-            if (route.RouteType == "Hiking") return days * 1000;
-            if (route.RouteType == "Ski") return days * 1500;
-            if (route.RouteType == "Water") return days * 2000;
-            return days * 1000;
-        }
+            RouteType.Hiking => days * 1000m,
+            RouteType.Ski => days * 1500m,
+            RouteType.Water => days * 2000m,
+            _ => days * 1000m
+        };
 
         public void NotifySubscribers(TouristRoute route)
         {

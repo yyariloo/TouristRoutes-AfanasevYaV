@@ -31,23 +31,16 @@ namespace TouristRoutes.Controllers
         }
 
         [HttpGet("filter")]
-        public IActionResult GetFilteredRoutes()
+        public async Task<IActionResult> GetFilteredRoutes([FromQuery] RouteFilterCriteria filter, CancellationToken ct)
         {
-            var filter = new RouteFilterCriteria
-            {
-                MinLat = 50.0,
-                MaxLat = 60.0,
-                RegionName = "Caucasus",
-                Season = "Summer"
-            };
-            var routes = FilterRoutes(filter);
+            var routes = await FilterRoutesAsync(filter, ct);
             return Ok(routes);
         }
 
-        private TouristRoute[] FilterRoutes(RouteFilterCriteria criteria)
+        private async Task<TouristRoute[]> FilterRoutesAsync(RouteFilterCriteria criteria, CancellationToken ct)
         {
-            Thread.Sleep(500);
-            return new TouristRoute[0];
+            await Task.Delay(500, ct);
+            return Array.Empty<TouristRoute>();
         }
     }
 }

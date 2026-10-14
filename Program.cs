@@ -8,6 +8,7 @@ builder.Services.AddScoped<IRouteService, RouteService>();
 builder.Services.AddSingleton<IRoutePricingService, RoutePricingService>();
 builder.Services.AddSingleton<IGpxParser, GpxParser>();
 builder.Services.AddHttpClient<IMapService, MapService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

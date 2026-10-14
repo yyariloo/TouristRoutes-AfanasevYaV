@@ -4,17 +4,20 @@ namespace TouristRoutes.Services
 {
     public class RouteService : IRouteService
     {
+        private readonly IRouteRepository _routeRepository;
         private readonly INotificationService _notificationService;
 
-        public RouteService(INotificationService notificationService)
+        public RouteService(
+            IRouteRepository routeRepository,
+            INotificationService notificationService)
         {
+            _routeRepository = routeRepository;
             _notificationService = notificationService;
         }
 
-        public async Task<TouristRoute> GetRouteByIdAsync(int id, CancellationToken ct = default)
+        public Task<TouristRoute> GetRouteByIdAsync(int id, CancellationToken ct = default)
         {
-            await Task.Delay(50, ct);
-            return new TouristRoute { Id = id, Name = "Test" };
+            return _routeRepository.GetRouteByIdAsync(id, ct);
         }
 
         public async Task SaveRouteGpxFileAsync(int routeId, string gpxContent, CancellationToken ct = default)

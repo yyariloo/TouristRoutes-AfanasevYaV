@@ -5,6 +5,7 @@ using TouristRoutes.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IRouteService, RouteService>();
+builder.Services.AddScoped<IRouteRepository, RouteRepository>();
 builder.Services.AddSingleton<IRoutePricingService, RoutePricingService>();
 builder.Services.AddSingleton<IGpxParser, GpxParser>();
 builder.Services.AddHttpClient<IMapService, MapService>();

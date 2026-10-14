@@ -8,8 +8,6 @@ namespace TouristRoutes.Services
 
         Task SaveRouteGpxFileAsync(int routeId, string gpxContent, CancellationToken ct = default);
         
-        Task DownloadAndCacheExternalMapAsync(int routeId, CancellationToken ct = default);
-
         void NotifySubscribers(TouristRoute route);
     }
 }

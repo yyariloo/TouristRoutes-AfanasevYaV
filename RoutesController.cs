@@ -25,6 +25,9 @@ namespace TouristRoutes.Controllers
         [HttpPost("upload-gpx")]
         public async Task<IActionResult> UploadGpx(int id, [FromBody] string gpxData)
         {
+            if (string.IsNullOrWhiteSpace(gpxData)) return BadRequest("GPX data is required.");
+            if (id <= 0) return BadRequest("Route id must be positive.");
+
             await _service.SaveRouteGpxFileAsync(id, gpxData);
             _service.NotifySubscribers(new TouristRoute { Id = id });
             return Ok();
@@ -33,6 +36,7 @@ namespace TouristRoutes.Controllers
         [HttpGet("filter")]
         public async Task<IActionResult> GetFilteredRoutes([FromQuery] RouteFilterCriteria filter, CancellationToken ct)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var routes = await FilterRoutesAsync(filter, ct);
             return Ok(routes);
         }
